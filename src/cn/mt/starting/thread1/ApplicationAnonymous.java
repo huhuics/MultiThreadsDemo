@@ -2,7 +2,7 @@
  * 深圳金融电子结算中心
  * Copyright (c) 1995-2017 All Rights Reserved.
  */
-package cn.mt.starting.thread;
+package cn.mt.starting.thread1;
 
 /**
  * 匿名类实现多线程
