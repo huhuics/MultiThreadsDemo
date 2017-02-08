@@ -2,7 +2,7 @@
  * 深圳金融电子结算中心
  * Copyright (c) 1995-2017 All Rights Reserved.
  */
-package cn.mt.threadlocal;
+package cn.mt.threadlocal2;
 
 /**
  * ThreadLocal用法示例
