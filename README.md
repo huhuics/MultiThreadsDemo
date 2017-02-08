@@ -5,7 +5,7 @@ Thread.currentThread().interrupt(); // Here!
 throw new RuntimeException(ex);
 ```  
 如果没有将异常封装成`RuntimeException`，该线程是不会停止的
- + 如果初始化ThreadLocal变量使用如下方式，则对所有线程该变量都是可见的：
+ + 如果初始化`ThreadLocal`变量使用如下方式，则对所有线程该变量都是可见的：
  ```java
  private ThreadLocal<Integer> threadLocal = new ThreadLocal<Integer>() {
                                                      /**
@@ -24,30 +24,16 @@ throw new RuntimeException(ex);
   + `yield`方法不是暂停当前线程，而是让出资源使用权，如果此时没有其他线程，则该线程继续执行
   + `AtomicInteger`变量具有原子性，所谓原子性是指对该变量的操作要么成功，要么失败，且在线程安全，即同一时间只允许一个线程操作该变量
   + `synchronized`的使用：
-  ```java
+  ```java
   public synchronized void method() { // blocks "this" from here.... 
     ...
-    ...
-    ...
-} // to here
+  } // to here
 
-public void method() { 
-    synchronized( this ) { // blocks "this" from here .... 
-        ....
-        ....
-        ....
-    }  // to here...
-}
+  public void method() { 
+      synchronized( this ) { // blocks "this" from here .... 
+          ....
+      }  // to here...
+  }
   ```
-  以上两种方式实际是没有区别的。使用这种方式加锁，将锁住整个对象，线程A获取锁以后，线程B将无法访问这个对象的任何被`synchronized`修饰的方法，但可以访问其它非同步方法，即没有被`synchronized`修饰的方法。但是下面这种加锁方式比上面的方式效率高一倍左右：
-  ```java
-// Using specific locks
-Object inputLock = new Object();
-
-private void someInputRelatedWork() {
-    synchronize(inputLock) { 
-        ... 
-    } 
-}
-  ```
-  
+  以上两种方式实际是没有区别的。使用这种方式加锁，将锁住整个对象，线程A获取锁以后，线程B将无法访问这个对象的任何被`synchronized`修饰的方法，但可以访问其它非同步方法，即没有被`synchronized`修饰的方法。但是下面这种加锁方式比上面的方式效率高一倍左右：
+ 
