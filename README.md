@@ -36,4 +36,14 @@ throw new RuntimeException(ex);
   }
   ```
   以上两种方式实际是没有区别的。使用这种方式加锁，将锁住整个对象，线程A获取锁以后，线程B将无法访问这个对象的任何被`synchronized`修饰的方法，但可以访问其它非同步方法，即没有被`synchronized`修饰的方法。但是下面这种加锁方式比上面的方式效率高一倍左右：
- 
+  + 使用其它对象锁
+  ```java
+  // Using specific locks
+  Object inputLock = new Object();
+
+  private void someInputRelatedWork() {
+      synchronize(inputLock) { 
+          ... 
+      } 
+  }
+  ```
