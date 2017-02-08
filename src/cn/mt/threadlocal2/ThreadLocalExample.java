@@ -16,7 +16,7 @@ public class ThreadLocalExample {
         private ThreadLocal<Integer> threadLocal = new ThreadLocal<Integer>() {
 
                                                      /**
-                                                      * 这种方法初始化ThreadLocal变量对所有变量都可见
+                                                      * 这种方法初始化ThreadLocal变量对所有线程都可见
                                                       */
                                                      @Override
                                                      protected Integer initialValue() {

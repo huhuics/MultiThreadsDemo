@@ -2,7 +2,7 @@
  * 深圳金融电子结算中心
  * Copyright (c) 1995-2017 All Rights Reserved.
  */
-package cn.mt.thread.pool;
+package cn.mt.thread.pool5;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

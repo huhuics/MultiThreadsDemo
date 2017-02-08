@@ -26,6 +26,7 @@ public class ApplicationAnonymous {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         System.out.println("捕获InterruptedException");
+                        Thread.currentThread().interrupt();
                         throw new RuntimeException("线程中断", e);
                     }
                 }
