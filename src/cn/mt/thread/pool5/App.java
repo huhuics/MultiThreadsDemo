@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 测试线程池
+ * 测试线程池.多个线程分别执行不同的任务
  * @author HuHui
  * @version $Id: App.java, v 0.1 2017年2月8日 下午10:47:38 HuHui Exp $
  */
