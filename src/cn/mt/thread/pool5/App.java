@@ -30,7 +30,7 @@ public class App {
 
         threadPool.shutdown();
 
-        threadPool.awaitTermination(1, TimeUnit.DAYS);
+        threadPool.awaitTermination(1, TimeUnit.SECONDS);
 
         System.out.println("所有任务已执行完");
 

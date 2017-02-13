@@ -94,7 +94,7 @@ class BlockQueue<T> {
                 notFull.await();
             }
             queue.add(t);
-            System.out.println("生产一个整数,队列大小:" + queue.size());
+            System.out.println(Thread.currentThread().getName() + "生产一个整数,队列大小:" + queue.size());
 
             notEmpty.signal();
         } finally {
@@ -111,7 +111,7 @@ class BlockQueue<T> {
                 notEmpty.await();
             }
             T t = queue.remove();
-            System.out.println("消费一个整数,队列大小:" + queue.size());
+            System.out.println(Thread.currentThread().getName() + "消费一个整数,队列大小:" + queue.size());
             notFull.signal();
             return t;
         } finally {
