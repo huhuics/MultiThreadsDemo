@@ -51,4 +51,5 @@ throw new RuntimeException(ex);
   + `awaitTermination`是让主线程等待线程池的任务执行，如果等待的过程中发生了请求关闭、超时或者当前线程中断，则主线程继续往下执行，而线程池中的任务继续执行，直到任务结束
   + **可重入锁**指的是在一个线程中可以多次获取同一把锁，比如：一个线程在执行一个带锁的方法，该方法又调用了另一个需要向同锁的方法，该线程可以直接执行调用的方法，而不需要重新获得锁。可重入锁的最大作用是**避免死锁**。`ReentrantLock`和`synchronized`都是可重入锁
   + `semaphore.release(n)`如果一个线程没有获取任何permit，则调用该方法将增加n个permits。如果一个线程申请了x个permit，但释放了y个（y>x），将增加y-x个permits
-  + `ExecutorService.invokeAll`将提交一个执行任务集合，返回时间取决于任务中最长的那个
+  + `ExecutorService.invokeAll`将提交一组任务，返回时间取决于任务中最长的那个
+  + `ExecutorService.invokeAny`将提交一组任务，那个任务先完成（未抛出异常）则返回其结果，一旦正常或异常返回后，则取消尚未完成的任务
