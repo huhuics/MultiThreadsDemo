@@ -2,7 +2,7 @@
  * 深圳金融电子结算中心
  * Copyright (c) 1995-2017 All Rights Reserved.
  */
-package cn.mt.semaphore;
+package cn.mt.semaphore12;
 
 import java.util.Random;
 import java.util.concurrent.Semaphore;
