@@ -53,3 +53,5 @@ throw new RuntimeException(ex);
   + `semaphore.release(n)`如果一个线程没有获取任何permit，则调用该方法将增加n个permits。如果一个线程申请了x个permit，但释放了y个（y>x），将增加y-x个permits
   + `ExecutorService.invokeAll`将提交一组任务，返回时间取决于任务中最长的那个
   + `ExecutorService.invokeAny`将提交一组任务，那个任务先完成（未抛出异常）则返回其结果，一旦正常或异常返回后，则取消尚未完成的任务
+  + 在Java中，线程不允许抛出`checked exception`，也就是说各个线程自己要把自己的`checked exception`处理掉。例如，在`Runnable.run()`签名中没有申明`throws Exception`。但是线程依然可能抛出`unchecked exception`，当线程抛出此类异常时线程就会终结，而对于主线程和其它线程完全不受影响，且完全感知不到某个线程抛出的异常（也就是说无法catch到这个异常）。JVM的这种设计源自一种理念：线程是独立执行的代码片段，线程的问题应该由线程自己来解决，而不委托到外部。基于这种理念，线程方法的异常（无论是checked 还是unchecked exception），都应该在线程代码边界（run方法内）进行try catch并处理掉。换句话说，我们不能捕获从线程中逃逸的异常。
+  + 如果需要捕获线程的unchecked exception应该怎么办？可以自定义类实现`Thread.UncaughtExceptionHandler`接口，Thread允许我们在每一个Thread对象上添加一个异常处理器`UncaughtExceptionHandler`，通过`thread.setUncaughtExceptionHandler`方法设置。
