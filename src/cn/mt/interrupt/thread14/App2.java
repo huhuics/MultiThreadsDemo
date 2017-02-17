@@ -17,12 +17,11 @@ public class App2 {
      * @param args
      */
     public static void main(String[] args) {
-
         try {
             Caller caller = new Caller();
             MyExceptionHandler meh = new MyExceptionHandler();
             Thread thread = new Thread(caller);
-            thread.setUncaughtExceptionHandler(meh);
+            //            thread.setUncaughtExceptionHandler(meh);
             thread.start();
             thread.join();
         } catch (Exception e) {
@@ -37,6 +36,7 @@ class Caller implements Runnable {
 
     @Override
     public void run() {
+
         throw new RuntimeException(Thread.currentThread().getName() + "线程抛出一个运行时异常");
     }
 }
