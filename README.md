@@ -55,3 +55,8 @@ throw new RuntimeException(ex);
   + `ExecutorService.invokeAny`将提交一组任务，那个任务先完成（未抛出异常）则返回其结果，一旦正常或异常返回后，则取消尚未完成的任务
   + 在Java中，线程不允许抛出`checked exception`，也就是说各个线程自己要把自己的`checked exception`处理掉。例如，在`Runnable.run()`签名中没有申明`throws Exception`。但是线程依然可能抛出`unchecked exception`，当线程抛出此类异常时线程就会终结，而对于主线程和其它线程完全不受影响，且完全感知不到某个线程抛出的异常（也就是说无法catch到这个异常）。JVM的这种设计源自一种理念：线程是独立执行的代码片段，线程的问题应该由线程自己来解决，而不委托到外部。基于这种理念，线程方法的异常（无论是checked 还是unchecked exception），都应该在线程代码边界（run方法内）进行try catch并处理掉。换句话说，我们不能捕获从线程中逃逸的异常。
   + 如果需要捕获线程的unchecked exception应该怎么办？可以自定义类实现`Thread.UncaughtExceptionHandler`接口，Thread允许我们在每一个Thread对象上添加一个异常处理器`UncaughtExceptionHandler`，通过`thread.setUncaughtExceptionHandler`方法设置。
+  + 而在线程池中比较特殊。默认情况下，线程池java.util.concurrent.ThreadPoolExecutor会catch住所有异常，如果使用submit(Runnable)或使用submit(Callable)获取其结果(java.util.concurrent.Future.get())会抛出ExecutionException，该异常即是Runnable或者Callable抛出的异常。也就是说，当我们向线程池提交了任务时，如果不理会任务结果（Future.get()），那么此异常将被线程吞掉。
+  + 如果需要获取线程池在运行时抛出的异常，有三种方法：
+    1. 通过Future.get获取
+    2. 通过继承并覆盖ThreadPoolExecutor.afterExecute(Runnable r, Throwable t)获取
+    3. 通过实现ThreadFactory接口，覆盖newThread方法，并在该方法中通过setUncaughtExceptionHandler设置自定义的Handler
