@@ -4,6 +4,11 @@
  */
 package cn.mt.starting.thread1;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 /**
  * 匿名类实现多线程
  * @author HuHui
@@ -15,11 +20,19 @@ public class ApplicationAnonymous {
      * @param args
      */
     public static void main(String[] args) {
+        ApplicationAnonymous app = new ApplicationAnonymous();
+        app.testInterrupt();
+        System.out.println("end");
+    }
 
-        Thread thread = new Thread(new Runnable() {
+    public void testInterrupt() {
+
+        ExecutorService threadPool = Executors.newFixedThreadPool(2);
+
+        Future<Integer> future = threadPool.submit(new Callable<Integer>() {
 
             @Override
-            public void run() {
+            public Integer call() {
                 for (int i = 0; i < 5; i++) {
                     System.out.println("Hello: " + i + " Thread: " + Thread.currentThread().getName());
                     try {
@@ -30,13 +43,21 @@ public class ApplicationAnonymous {
                         throw new RuntimeException("线程中断", e);
                     }
                 }
+                return 1999;
             }
 
         });
 
-        thread.start();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        thread.interrupt();
+        future.cancel(true);
+
+        threadPool.shutdown();
 
     }
+
 }
