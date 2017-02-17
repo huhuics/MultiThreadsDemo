@@ -5,6 +5,10 @@
 package cn.mt.interrupt.thread14;
 
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * 
@@ -18,12 +22,11 @@ public class App2 {
      */
     public static void main(String[] args) {
         try {
+            ExecutorService threadPool = Executors.newCachedThreadPool();
             Caller caller = new Caller();
-            MyExceptionHandler meh = new MyExceptionHandler();
-            Thread thread = new Thread(caller);
-            //            thread.setUncaughtExceptionHandler(meh);
-            thread.start();
-            thread.join();
+            Future<?> ret = threadPool.submit(caller);
+           
+            threadPool.shutdown();
         } catch (Exception e) {
             System.out.println("join interrupted");
         }
@@ -36,9 +39,9 @@ class Caller implements Runnable {
 
     @Override
     public void run() {
-
         throw new RuntimeException(Thread.currentThread().getName() + "线程抛出一个运行时异常");
     }
+
 }
 
 class MyExceptionHandler implements UncaughtExceptionHandler {
