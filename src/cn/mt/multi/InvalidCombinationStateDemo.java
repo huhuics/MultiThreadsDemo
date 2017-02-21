@@ -5,6 +5,9 @@
 package cn.mt.multi;
 
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * 组合状态
@@ -29,8 +32,7 @@ public class InvalidCombinationStateDemo {
 
         while (true) {
             int randomInt = random.nextInt(1000);
-            runner.m = randomInt;
-            runner.n = 2 * randomInt;
+            runner.write(randomInt);
         }
     }
 
@@ -40,23 +42,50 @@ public class InvalidCombinationStateDemo {
 
     private class Runner implements Runnable {//读写要同步才能解决这个问题
 
-        public int m;
-        public int n;
+        private final ReadWriteLock rwLock    = new ReentrantReadWriteLock();
+
+        private final Lock          readLock  = rwLock.readLock();
+
+        private final Lock          writeLock = rwLock.writeLock();
+
+        private int                 m;
+
+        private int                 n;
+
+        public boolean isEqual() {
+            readLock.lock();
+            try {
+                return 2 * m == n;
+            } finally {
+                readLock.unlock();
+            }
+        }
+
+        public void write(int num) {
+            writeLock.lock();
+            try {
+                m = num;
+                n = 2 * num;
+            } finally {
+                writeLock.unlock();
+            }
+        }
 
         @Override
         public void run() {
             System.out.println("子线程开始运行");
             int c1 = 0, c2 = 0;
             for (int i = 0;; i++) {
-                if (2 * m != n) {
+                if (!isEqual()) {
                     c1++;
-                    System.out.println("第" + c1 + "次不相同, 2*m=" + 2 * m + ", n=" + n);
+                    System.out.println("第" + c1 + "次不相同");
                 } else {
                     c2++;
-                    System.out.println("第" + c2 + "次相等, 2*m=" + 2 * m + ", n=" + n);
+                    System.out.println("第" + c2 + "次相等");
                 }
             }
         }
+
     }
 
 }
