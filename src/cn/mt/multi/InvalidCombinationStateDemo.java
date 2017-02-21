@@ -48,16 +48,15 @@ public class InvalidCombinationStateDemo {
             System.out.println("子线程开始运行");
             int c1 = 0, c2 = 0;
             for (int i = 0;; i++) {
-                if (m != 2 * n) {
+                if (2 * m != n) {
                     c1++;
-                    System.out.println("第" + c1 + "次不相同");
+                    System.out.println("第" + c1 + "次不相同, 2*m=" + 2 * m + ", n=" + n);
                 } else {
                     c2++;
-                    System.out.println("第" + c2 + "次相等");
+                    System.out.println("第" + c2 + "次相等, 2*m=" + 2 * m + ", n=" + n);
                 }
             }
         }
-
     }
 
 }
