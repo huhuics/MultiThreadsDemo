@@ -5,7 +5,6 @@
 package cn.mt.interrupt.thread14;
 
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -25,7 +24,7 @@ public class App2 {
             ExecutorService threadPool = Executors.newCachedThreadPool();
             Caller caller = new Caller();
             Future<?> ret = threadPool.submit(caller);
-           
+            ret.get();
             threadPool.shutdown();
         } catch (Exception e) {
             System.out.println("join interrupted");
@@ -39,7 +38,13 @@ class Caller implements Runnable {
 
     @Override
     public void run() {
-        throw new RuntimeException(Thread.currentThread().getName() + "线程抛出一个运行时异常");
+        try {
+            int i = 1 / 0;
+        } catch (Exception e) {
+            System.out.println("子线程捕获一个异常");
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
 }
