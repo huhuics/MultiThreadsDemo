@@ -60,3 +60,7 @@ throw new RuntimeException(ex);
     1. 通过Future.get获取
     2. 通过继承并覆盖ThreadPoolExecutor.afterExecute(Runnable r, Throwable t)获取
     3. 通过实现ThreadFactory接口，覆盖newThread方法，并在该方法中通过setUncaughtExceptionHandler设置自定义的Handler
+  + 通常可用以下方式来提升程序可伸缩性
+    1. 减少锁的持有时间
+    2. 降低锁的粒度。例如将锁分段
+    3. 采用非独占的锁或非阻塞锁来代替独占锁。例如使用原子变量
