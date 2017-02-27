@@ -64,6 +64,7 @@ throw new RuntimeException(ex);
     1. 减少锁的持有时间
     2. 降低锁的粒度。例如将锁分段
     3. 采用非独占的锁或非阻塞锁来代替独占锁。例如使用原子变量
-  + 内置锁`synchronized`相比于`ReentrantLock`有一些局限性，如无法中断一个正在等待获取锁的线程，无法实现非阻塞结构的加锁规则。而`ReentrantLock`不能完全取代`synchronized`的原因是，如果不释放锁，`ReentrantLock`相当于定时炸弹，当程序执行控制离开被保护的代码块时，不会自动清除锁。
-  + 在JDK6以后，`synchronized`与`ReentrantLock`二者性能已经非常接近。
+  + 内置锁`synchronized`相比于`ReentrantLock`有一些局限性，如无法中断一个正在等待获取锁的线程，无法实现非阻塞结构的加锁规则，`ReentrantLock`提供可定时的、可轮询的与可中断的锁获取操作，公平队列，以及非块结构的锁。而`ReentrantLock`不能完全取代`synchronized`的原因是，如果不释放锁，`ReentrantLock`相当于定时炸弹，当程序执行控制离开被保护的代码块时，不会自动清除锁。
+  + 在JDK6以后，`synchronized`与`ReentrantLock`二者性能已经非常接近。显示的`Lock`提供了一些扩展功能，更具灵活性，但`ReentrantLock`不能完全替代`synchronized`，只有在`synchronized`无法满足需求时，才应该使用它。
   + `ReentrantLock`可以创建一个非公平的锁（默认）和公平锁，公平锁上，线程将按照它们发出请求的顺序来获得锁，但在非公平锁上，则允许“插队”。公平锁的性能比非公平锁要差约两个数量级，一个原因是在恢复一个被挂起的线程与该线程真正开始工作之间存在着严重的时延，因此不必要的话，不要为公平性付出代价。
+  + 对于在多处理器系统上被频繁读取的数据结构，`ReadWriteLock`能够提高性能，而在其它情况下，读写锁的性能比独占锁性能要差一些，因为他们复杂性更高。
