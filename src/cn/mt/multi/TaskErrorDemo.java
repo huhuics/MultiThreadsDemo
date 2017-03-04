@@ -42,11 +42,14 @@ public class TaskErrorDemo {
         }
 
         List<Future<Boolean>> rets = null;
+        System.out.println("调用invokeAll前");
         try {
             rets = threadPool.invokeAll(tasks);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        System.out.println("调用invokeAll后");
 
         int suc = 0, fai = 0;
         for (Future<Boolean> ret : rets) {
@@ -54,16 +57,19 @@ public class TaskErrorDemo {
                 Boolean getFuture = ret.get();
                 if (getFuture) {
                     ++suc;
+                } else {
+                    ++fai;
                 }
             } catch (ExecutionException e) {
                 System.out.println("捕获future一个异常");
                 ++fai;
-                ret.cancel(true);
             }
         }
 
-        threadPool.awaitTermination(5, TimeUnit.SECONDS);
+        System.out.println("统计完成");
+
         threadPool.shutdown();
+        threadPool.awaitTermination(5, TimeUnit.HOURS); //invokeAll会等所有任务执行完成再返回结果
 
         System.out.println("suc=" + suc + ",fai=" + fai);
 
@@ -78,9 +84,9 @@ public class TaskErrorDemo {
 
             if (ranInt >= 10) {
                 System.out.println("随机数过大,任务抛异常");
-                throw new RuntimeException("随机数过大,任务抛异常");
+                throw new RuntimeException("随机数过大,抛出一个异常");
             } else {
-                Thread.sleep(300);
+                Thread.sleep(1000);
                 return true;
             }
 
