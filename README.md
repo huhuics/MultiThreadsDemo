@@ -76,3 +76,8 @@ throw new RuntimeException(ex);
   + 双重检查加锁(DCL)这种使用方式已经被广泛地废弃，原因是当没有同步的情况下读取一个共享对象时，可能发生的最糟糕事情是线程可能看到引用的当前值，但对象的状态值却是失效的。更底层原因是当缺少`Happens-Before`关系时，就可能出现重指令排序问题。
   + `Executors.newCachedThreadPool`使用的是`SynchronousQueue`来避免任务排队，`SynchronousQueue`不是一个真正的队列，里面没有元素，它是一种在线程之间进行移交的机制。要将一个元素放入`SynchronousQueue`中，必须有另一个线程正在等待接受这个元素。如果没有线程正在等待，并且线程池的当前大小小于最大值，那么线程池将创建一个新的线程，否则根据饱和策略，这个任务将被拒绝。只有当线程池线程数量是无界或者可以拒绝任务时，`SynchronousQueue`才有实用价值。
   + `ExecutorService.invokeAll`会等待所有任务执行完成才返回，因此主线程运行到这里将会被阻塞。`threadPool.shutdown()`是在`threadPool.awaitTermination`**之前**调用，shutdown目的是使得线程池不再接受任务。
+  + ConcurrentHashMap
+  ```java
+  hash >>> segmentShift) & segmentMask//定位Segment所使用的hash算法
+int index = hash & (tab.length - 1);// 定位HashEntry所使用的hash算法
+  ```
